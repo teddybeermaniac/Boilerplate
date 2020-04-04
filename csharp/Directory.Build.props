@@ -5,16 +5,16 @@
         <NoWarn>NU5105</NoWarn>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/Boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="StyleCop.Analyzers" Version="*">
+        <PackageReference Include="StyleCop.Analyzers.Unstable" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
 
     <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Test'))">
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <Authors>Michał Przybyś</Authors>
