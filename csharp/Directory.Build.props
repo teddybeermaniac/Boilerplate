@@ -6,6 +6,8 @@
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
         <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/Boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <RestoreConfigFile>$(MSBuildThisFileDirectory)/Boilerplate/csharp/NuGet.config</RestoreConfigFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers.Unstable" Version="*">
