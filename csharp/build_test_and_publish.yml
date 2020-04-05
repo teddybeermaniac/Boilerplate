@@ -36,9 +36,9 @@ jobs:
     - name: Fetch repository for GitVersion
       run: |
         if [[ "$(git rev-parse --is-shallow-repository)" == 'true' ]]; then
-          git fetch --prune --unshallow
+          git fetch --no-recurse-submodules --prune --unshallow
         else
-          git fetch --prune
+          git fetch --no-recurse-submodules --prune
         fi
 
     - name: Cache NuGet packages
