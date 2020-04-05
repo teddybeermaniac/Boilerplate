@@ -65,12 +65,13 @@ jobs:
       with:
         token: ${{ secrets.TOKEN_CODECOV }}
         file: coverage.xml
+        fail_ci_if_error: true
 
     - name: Package libraries
       if: github.event_name == 'push'
       run: |
         dotnet pack --no-build --configuration Release --output packages
-    
+
     - name: Push packages
       if: github.event_name == 'push'
       run: |
