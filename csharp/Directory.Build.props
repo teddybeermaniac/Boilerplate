@@ -41,7 +41,6 @@
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>opencover</CoverletOutputFormat>
         <CoverletOutput>$(MSBuildThisFileDirectory)/coverage.xml</CoverletOutput>
-        <ExcludeByFile>**/*.resj.g.cs</ExcludeByFile>
         <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
     </PropertyGroup>
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Test'))">
