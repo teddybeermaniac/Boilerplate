@@ -1,0 +1,8 @@
+bin
+obj
+
+**/.vscode/*
+!**/.vscode/tasks.json
+
+coverage.xml
+report

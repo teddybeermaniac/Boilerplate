@@ -45,13 +45,19 @@
         <CoverletOutputFormat>opencover</CoverletOutputFormat>
         <CoverletOutput>$(MSBuildThisFileDirectory)/coverage.xml</CoverletOutput>
         <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+        <GenerateCoverageReport>true</GenerateCoverageReport>
     </PropertyGroup>
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Test'))">
         <PackageReference Include="coverlet.msbuild" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="ReportGenerator" Version="*">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="xunit" Version="*" />
         <PackageReference Include="xunit.runner.visualstudio" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -59,4 +65,10 @@
         </PackageReference>
         <ProjectReference Include="$(MSBuildThisFileDirectory)/$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
     </ItemGroup>
+    <Target Name="GenerateCoverageReportAfterTest" AfterTargets="GenerateCoverageResultAfterTest" Condition="'$(GenerateCoverageReport)' == 'true'">
+        <ItemGroup>
+            <CoverageFiles Include="$(CoverletOutput)" />
+        </ItemGroup>
+        <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(MSBuildThisFileDirectory)/report" ReportTypes="Html" />
+    </Target>
 </Project>
