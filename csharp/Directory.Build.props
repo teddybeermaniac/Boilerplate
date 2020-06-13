@@ -21,7 +21,7 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <Authors>Michał Przybyś</Authors>
         <Copyright>Copyright © 2020 Michał Przybyś &lt;michal@przybys.eu&gt;</Copyright>
-        <PackageLicenseExpression>MITNFA</PackageLicenseExpression>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/teddybeermaniac/$(MSBuildProjectName)</RepositoryUrl>
     </PropertyGroup>
     <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Test'))">
