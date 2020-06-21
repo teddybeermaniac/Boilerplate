@@ -6,3 +6,7 @@ obj
 
 coverage.xml
 report
+
+docs/.jekyll-cache
+docs/.jekyll-metadata
+docs/_site
