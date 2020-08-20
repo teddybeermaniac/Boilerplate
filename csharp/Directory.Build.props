@@ -16,55 +16,62 @@
         </PackageReference>
     </ItemGroup>
 
-    <PropertyGroup Condition="!$(MSBuildProjectName.EndsWith('.Test'))">
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Authors>Michał Przybyś</Authors>
-        <Copyright>Copyright © 2020 Michał Przybyś &lt;michal@przybys.eu&gt;</Copyright>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://github.com/teddybeermaniac/$(MSBuildProjectName)</RepositoryUrl>
-    </PropertyGroup>
-    <ItemGroup Condition="!$(MSBuildProjectName.EndsWith('.Test'))">
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-            <_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
-        </AssemblyAttribute>
-        <PackageReference Include="elemental.jsonresource" Version="*">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="NuGet4698Workaround" Version="*">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="GitVersionTask" Version="*">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
+    <Choose>
+        <When Condition="!$(MSBuildProjectName.EndsWith('.Test'))">
+            <PropertyGroup>
+                <IncludeSymbols>true</IncludeSymbols>
+                <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+                <Authors>Michał Przybyś</Authors>
+                <Copyright>Copyright © 2020 Michał Przybyś &lt;michal@przybys.eu&gt;</Copyright>
+                <PackageLicenseExpression>MIT</PackageLicenseExpression>
+                <RepositoryUrl>https://github.com/teddybeermaniac/$(MSBuildProjectName)</RepositoryUrl>
+            </PropertyGroup>
+            <ItemGroup>
+                <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+                    <_Parameter1>$(MSBuildProjectName).Test</_Parameter1>
+                </AssemblyAttribute>
+                <PackageReference Include="elemental.jsonresource" Version="*">
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <PackageReference Include="NuGet4698Workaround" Version="*">
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <PackageReference Include="GitVersionTask" Version="*">
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+            </ItemGroup>
+        </When>
 
-    <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Test'))">
-        <IsPackable>false</IsPackable>
-        <CollectCoverage>true</CollectCoverage>
-        <CoverletOutputFormat>opencover</CoverletOutputFormat>
-        <CoverletOutput>$(MSBuildThisFileDirectory)/coverage.xml</CoverletOutput>
-        <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
-        <GenerateCoverageReport>true</GenerateCoverageReport>
-    </PropertyGroup>
-    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('.Test'))">
-        <PackageReference Include="coverlet.msbuild" Version="*">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="ReportGenerator" Version="*">
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="xunit" Version="*" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="*">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <ProjectReference Include="$(MSBuildThisFileDirectory)/$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
-    </ItemGroup>
+        <Otherwise>
+            <PropertyGroup>
+                <IsPackable>false</IsPackable>
+                <CollectCoverage>true</CollectCoverage>
+                <CoverletOutputFormat>opencover</CoverletOutputFormat>
+                <CoverletOutput>$(MSBuildThisFileDirectory)/coverage.xml</CoverletOutput>
+                <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+                <GenerateCoverageReport>true</GenerateCoverageReport>
+            </PropertyGroup>
+            <ItemGroup>
+                <PackageReference Include="coverlet.msbuild" Version="*">
+                    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*">
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <PackageReference Include="ReportGenerator" Version="*">
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <PackageReference Include="xunit" Version="*" />
+                <PackageReference Include="xunit.runner.visualstudio" Version="*">
+                    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                    <PrivateAssets>all</PrivateAssets>
+                </PackageReference>
+                <ProjectReference Include="$(MSBuildThisFileDirectory)/$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
+
     <Target Name="GenerateCoverageReportAfterTest" AfterTargets="GenerateCoverageResultAfterTest" Condition="'$(GenerateCoverageReport)' == 'true'">
         <ItemGroup>
             <CoverageFiles Include="$(CoverletOutput)" />
