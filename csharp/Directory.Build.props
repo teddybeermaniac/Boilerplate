@@ -25,7 +25,6 @@
                 <Copyright>Copyright © 2020 Michał Przybyś &lt;michal@przybys.eu&gt;</Copyright>
                 <PackageLicenseExpression>MIT</PackageLicenseExpression>
                 <RepositoryUrl>https://github.com/teddybeermaniac/$(MSBuildProjectName)</RepositoryUrl>
-                <IsPackable Condition="'$(OutputType)' != 'Library'">false</IsPackable>
             </PropertyGroup>
             <ItemGroup>
                 <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
