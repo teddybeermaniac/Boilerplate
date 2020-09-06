@@ -10,6 +10,8 @@
         <Rule Id="SA1124" Action="None" />
         <!-- Using directive should appear within a namespace declaration -->
         <Rule Id="SA1200" Action="None" />
+        <!-- Element documentation should not be copied and pasted -->
+        <Rule Id="SA1625" Action="None" />
         <!-- The file header XML is invalid. -->
         <Rule Id="SA1633" Action="None" />
     </Rules>
