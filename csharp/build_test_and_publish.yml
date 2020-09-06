@@ -73,7 +73,7 @@ jobs:
 
     - id: restore_nuget_packages
       name: Restore NuGet packages
-      run: nuget restore -LockedMode
+      run: dotnet restore
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN_PACKAGES }}
 
