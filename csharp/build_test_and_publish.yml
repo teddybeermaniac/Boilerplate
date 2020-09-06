@@ -12,9 +12,13 @@ jobs:
     steps:
     - id: install_gitversion
       name: Install GitVersion
-      uses: gittools/actions/gitversion/setup@v0.9.4
-      with:
-        versionSpec: 'x'
+      # Uncomment this when stable GitVersion won't be broken anymore... Judging by last 3 years
+      # of me using it - don't ever uncomment this.
+      #uses: gittools/actions/gitversion/setup@v0.9.4
+      #with:
+      #  versionSpec: 'x'
+      run: |
+        echo "::add-path::${PWD}/Boilerplate/_gitversion"
 
     - id: install_net_core
       name: Install .Net Core
@@ -49,7 +53,10 @@ jobs:
 
     - id: gitversion
       name: Get version from GitVersion
-      uses: gittools/actions/gitversion/execute@v0.9.2
+      uses: gittools/actions/gitversion/execute@v0.9.4
+      with:
+        useConfigFile: true
+        configFilePath: GitVersion.yml
 
     - id: tag_repository
       name: Tag repository
@@ -106,7 +113,8 @@ jobs:
     - id: push_tag
       name: Push tag
       if: github.event_name == 'push' && steps.current_branch.outputs.name == 'master'
-      run: echo 'TODO: PUSH TAG'
+      run: |
+        git push origin "refs/tags/v${{ steps.gitversion.outputs.semVer }}"
 
     - id: push_packages
       name: Push packages
