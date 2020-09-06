@@ -10,25 +10,23 @@ jobs:
   build_test_and_publish:
     runs-on: ubuntu-latest
     steps:
+    - id: install_gitversion
+      name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.4
+      with:
+        versionSpec: 'x'
+
     - id: install_net_core
       name: Install .Net Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '3.1.103'
-
-    - id: cache_nuget
-      name: Cache NuGet
-      uses: actions/cache@v1
-      with:
-        path: ~/.nuget/bin
-        key: ${{ runner.os }}-nuget-bin
+        dotnet-version: '3.1.x'
+      env:
+        DOTNET_CLI_TELEMETRY_OPTOUT: true
 
     - id: install_nuget
       name: Install NuGet
-      if: steps.cache_nuget.outputs.cache-hit != 'true'
-      run: |
-        mkdir -p ~/.nuget/bin
-        wget https://dist.nuget.org/win-x86-commandline/v5.4.0/nuget.exe -O ~/.nuget/bin/nuget.exe
+      uses: nuget/setup-nuget@v1
 
     - id: checkout_repository
       name: Checkout repository
@@ -45,6 +43,18 @@ jobs:
           git fetch --no-recurse-submodules --prune
         fi
 
+    - id: current_branch
+      name: Get current branch name
+      run: echo "##[set-output name=name;]$(git branch --show-current)"
+
+    - id: gitversion
+      name: Get version from GitVersion
+      uses: gittools/actions/gitversion/execute@v0.9.2
+
+    - id: tag_repository
+      name: Tag repository
+      run: git tag "v${{ steps.gitversion.outputs.semVer }}"
+
     - id: cache_nuget_packages
       name: Cache NuGet packages
       uses: actions/cache@v1
@@ -56,9 +66,9 @@ jobs:
 
     - id: restore_nuget_packages
       name: Restore NuGet packages
-      run: mono ~/.nuget/bin/nuget.exe restore -LockedMode
+      run: nuget restore -LockedMode
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN_NUGET }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN_PACKAGES }}
 
     - id: build_solution
       name: Build solution
@@ -85,7 +95,6 @@ jobs:
 
     - id: package_libraries
       name: Package libraries
-      if: github.event_name == 'push'
       run: |
         dotnet pack --no-build --configuration Release --output packages
         if [[ "$(ls -1 packages 2> /dev/null | wc -l)" == '0' ]]; then
@@ -94,11 +103,16 @@ jobs:
             echo '##[set-output name=packages_exist;]true'
         fi
 
+    - id: push_tag
+      name: Push tag
+      if: github.event_name == 'push' && steps.current_branch.outputs.name == 'master'
+      run: echo 'TODO: PUSH TAG'
+
     - id: push_packages
       name: Push packages
-      if: github.event_name == 'push' && steps.package_libraries.outputs.packages_exist == 'true'
+      if: github.event_name == 'push' && steps.current_branch.outputs.name == 'master' && steps.package_libraries.outputs.packages_exist == 'true'
       run: |
-        mono ~/.nuget/bin/nuget.exe push packages/*.nupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
-        mono ~/.nuget/bin/nuget.exe push packages/*.snupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
+        nuget push packages/*.nupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
+        nuget push packages/*.snupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
       env:
-        GITHUB_TOKEN: ${{ secrets.TOKEN_NUGET }}
+        GITHUB_TOKEN: ${{ secrets.TOKEN_PACKAGES }}
