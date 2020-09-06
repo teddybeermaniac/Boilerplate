@@ -1,0 +1,2 @@
+merge-message-formats:
+    github: '^Merge pull request #(?<PullRequestNumber>\d+) (from|in) (?:(:?teddybeermaniac/)(?<SourceBranch>[^\s]*))(?: into (?<TargetBranch>[^\s]*))*'

@@ -1,0 +1,4 @@
+#! /bin/sh
+DIRECTORY="$(dirname "${0}")"
+
+exec dotnet "${DIRECTORY}/gitversion.dll" "${@}"
