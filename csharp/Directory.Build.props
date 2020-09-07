@@ -4,16 +4,17 @@
         <Nullable>enable</Nullable>
         <NoWarn>NU5105</NoWarn>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)/Boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreConfigFile>$(MSBuildThisFileDirectory)/Boilerplate/csharp/NuGet.config</RestoreConfigFile>
+        <RestoreConfigFile>$(MSBuildThisFileDirectory)Boilerplate/csharp/NuGet.config</RestoreConfigFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers.Unstable" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)Boilerplate/csharp/stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
     <Choose>
@@ -47,7 +48,7 @@
                 <IsPackable>false</IsPackable>
                 <CollectCoverage>true</CollectCoverage>
                 <CoverletOutputFormat>opencover</CoverletOutputFormat>
-                <CoverletOutput>$(MSBuildThisFileDirectory)/coverage.xml</CoverletOutput>
+                <CoverletOutput>$(MSBuildThisFileDirectory)coverage.xml</CoverletOutput>
                 <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
                 <GenerateCoverageReport>true</GenerateCoverageReport>
             </PropertyGroup>
@@ -67,7 +68,7 @@
                     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
                     <PrivateAssets>all</PrivateAssets>
                 </PackageReference>
-                <ProjectReference Include="$(MSBuildThisFileDirectory)/$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
+                <ProjectReference Include="$(MSBuildThisFileDirectory)$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
             </ItemGroup>
         </Otherwise>
     </Choose>
@@ -76,6 +77,6 @@
         <ItemGroup>
             <CoverageFiles Include="$(CoverletOutput)" />
         </ItemGroup>
-        <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(MSBuildThisFileDirectory)/report" ReportTypes="Html" />
+        <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(MSBuildThisFileDirectory)report" ReportTypes="Html" />
     </Target>
 </Project>
