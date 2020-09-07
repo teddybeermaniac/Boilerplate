@@ -1,18 +1,8 @@
 <RuleSet Name="StyleCop rules" ToolsVersion="10.0">
     <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-        <!-- Closing parenthesis should not be preceded by a space -->
-        <Rule Id="SA1009" Action="None" />
-        <!-- Prefix local calls with this -->
-        <Rule Id="SA1101" Action="None" />
-        <!-- Closing parenthesis should be on line of last parameter -->
-        <Rule Id="SA1111" Action="None" />
         <!-- Do not use regions -->
         <Rule Id="SA1124" Action="None" />
-        <!-- Using directive should appear within a namespace declaration -->
-        <Rule Id="SA1200" Action="None" />
         <!-- Element documentation should not be copied and pasted -->
         <Rule Id="SA1625" Action="None" />
-        <!-- The file header XML is invalid. -->
-        <Rule Id="SA1633" Action="None" />
     </Rules>
 </RuleSet>
