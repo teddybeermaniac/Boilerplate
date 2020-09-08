@@ -60,6 +60,7 @@
                 <PackageReference Include="Microsoft.NET.Test.Sdk" Version="*">
                     <PrivateAssets>all</PrivateAssets>
                 </PackageReference>
+                <PackageReference Include="Moq" Version="*" />
                 <PackageReference Include="ReportGenerator" Version="*">
                     <PrivateAssets>all</PrivateAssets>
                 </PackageReference>
