@@ -1,8 +1,8 @@
 bin
 obj
 
-.vscode/*
-!.vscode/tasks.json
+**/.vscode/*
+!**/.vscode/tasks.json
 
 /coverage
 
