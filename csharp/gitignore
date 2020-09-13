@@ -1,12 +1,11 @@
 bin
 obj
 
-**/.vscode/*
-!**/.vscode/tasks.json
+.vscode/*
+!.vscode/tasks.json
 
-coverage.xml
-report
+/coverage
 
-docs/.jekyll-cache
-docs/.jekyll-metadata
-docs/_site
+/docs/.jekyll-cache
+/docs/.jekyll-metadata
+/docs/_site
