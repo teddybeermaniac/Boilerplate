@@ -86,11 +86,6 @@ jobs:
       name: Test solution
       run: |
         dotnet test --no-build --configuration Release /property:GenerateCoverageReport=false
-        if [[ -f 'coverage.xml' ]]; then
-            echo '##[set-output name=coverage_exist;]true'
-        else
-            echo '##[set-output name=coverage_exist;]false'
-        fi
 
     - id: find_coverage
       name: Find code coverage
@@ -105,7 +100,7 @@ jobs:
 
     - id: upload_coverage
       name: Upload code coverage
-      if: steps.find_coverage.outputs.coverage_exist == 'true'
+      if: steps.find_coverage.outputs.coverage_exists == 'true'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.TOKEN_CODECOV }}
