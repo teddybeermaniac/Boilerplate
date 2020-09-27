@@ -4,17 +4,17 @@
         <Nullable>enable</Nullable>
         <NoWarn>NU5105</NoWarn>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <RestoreConfigFile>$(MSBuildThisFileDirectory)Boilerplate/csharp/NuGet.config</RestoreConfigFile>
+        <RestoreConfigFile>$(MSBuildThisFileDirectory)boilerplate/csharp/NuGet.config</RestoreConfigFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers.Unstable" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <AdditionalFiles Include="$(MSBuildThisFileDirectory)Boilerplate/csharp/stylecop.json" Link="stylecop.json" />
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)boilerplate/csharp/stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
     <Choose>
@@ -51,7 +51,7 @@
                 <IsPackable>false</IsPackable>
                 <CollectCoverage>true</CollectCoverage>
                 <CoverletOutputFormat>opencover</CoverletOutputFormat>
-                <CoverletOutput>$(MSBuildThisFileDirectory)coverage.xml</CoverletOutput>
+                <CoverletOutput>$(MSBuildThisFileDirectory)coverage/$(MSBuildProjectName)_coverage.xml</CoverletOutput>
                 <ExcludeByAttribute>Obsolete,GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
                 <GenerateCoverageReport>true</GenerateCoverageReport>
             </PropertyGroup>
@@ -72,15 +72,15 @@
                     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
                     <PrivateAssets>all</PrivateAssets>
                 </PackageReference>
-                <ProjectReference Include="$(MSBuildThisFileDirectory)$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
+                <ProjectReference Include="$(MSBuildThisFileDirectory)source/$(MSBuildProjectName.Replace('.Test', ''))/$(MSBuildProjectName.Replace('.Test', '')).csproj" />
             </ItemGroup>
         </Otherwise>
     </Choose>
 
     <Target Name="GenerateCoverageReportAfterTest" AfterTargets="GenerateCoverageResultAfterTest" Condition="'$(GenerateCoverageReport)' == 'true'">
         <ItemGroup>
-            <CoverageFiles Include="$(CoverletOutput)" />
+            <CoverageFiles Include="$(MSBuildThisFileDirectory)coverage/*_coverage.xml" />
         </ItemGroup>
-        <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(MSBuildThisFileDirectory)report" ReportTypes="Html" />
+        <ReportGenerator ReportFiles="@(CoverageFiles)" TargetDirectory="$(MSBuildThisFileDirectory)coverage" ReportTypes="Html" />
     </Target>
 </Project>

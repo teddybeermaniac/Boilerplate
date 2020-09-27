@@ -5,6 +5,7 @@ on:
     branches: [ develop, master ]
   pull_request:
     branches: [ develop, master ]
+  workflow_dispatch:
 
 jobs:
   build_test_and_publish:
@@ -18,7 +19,7 @@ jobs:
       #with:
       #  versionSpec: 'x'
       run: |
-        echo "::add-path::${PWD}/Boilerplate/_gitversion"
+        echo "::add-path::${PWD}/boilerplate/_gitversion"
 
     - id: install_net_core
       name: Install .Net Core
@@ -47,11 +48,11 @@ jobs:
           git fetch --no-recurse-submodules --prune
         fi
 
-    - id: current_branch
+    - id: get_branch
       name: Get current branch name
       run: echo "##[set-output name=name;]$(git branch --show-current)"
 
-    - id: gitversion
+    - id: get_gitversion
       name: Get version from GitVersion
       uses: gittools/actions/gitversion/execute@v0.9.4
       with:
@@ -60,9 +61,9 @@ jobs:
 
     - id: tag_repository
       name: Tag repository
-      run: git tag "v${{ steps.gitversion.outputs.semVer }}"
+      run: git tag "v${{ steps.get_gitversion.outputs.semVer }}"
 
-    - id: cache_nuget_packages
+    - id: cache_packages
       name: Cache NuGet packages
       uses: actions/cache@v1
       with:
@@ -71,7 +72,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-packages-
 
-    - id: restore_nuget_packages
+    - id: restore_packages
       name: Restore NuGet packages
       run: dotnet restore
       env:
@@ -85,19 +86,25 @@ jobs:
       name: Test solution
       run: |
         dotnet test --no-build --configuration Release /property:GenerateCoverageReport=false
-        if [[ -f 'coverage.xml' ]]; then
-            echo '##[set-output name=coverage_exist;]true'
+
+    - id: find_coverage
+      name: Find code coverage
+      run: |
+        COVERAGE_FILES="$(find coverage -iname '*_coverage.xml' -printf '%p,' | sed 's/,$//')"
+        if [[ -z "${COVERAGE_FILES}" ]]; then
+            echo '##[set-output name=coverage_exists;]false'
         else
-            echo '##[set-output name=coverage_exist;]false'
+            echo '##[set-output name=coverage_exists;]true'
+            echo "##[set-output name=coverage_files;]${COVERAGE_FILES}"
         fi
 
-    - id: upload_code_coverage
+    - id: upload_coverage
       name: Upload code coverage
-      if: steps.test_solution.outputs.coverage_exist == 'true'
+      if: steps.find_coverage.outputs.coverage_exists == 'true'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.TOKEN_CODECOV }}
-        file: coverage.xml
+        files: ${{ steps.find_coverage.outputs.coverage_files }}
         fail_ci_if_error: true
 
     - id: package_libraries
@@ -112,15 +119,15 @@ jobs:
 
     - id: push_tag
       name: Push tag
-      if: github.event_name == 'push' && steps.current_branch.outputs.name == 'master'
+      if: github.event_name == 'push' && steps.get_branch.outputs.name == 'master'
       run: |
-        git push origin "refs/tags/v${{ steps.gitversion.outputs.semVer }}"
+        git push origin "refs/tags/v${{ steps.get_gitversion.outputs.semVer }}"
 
     - id: push_packages
       name: Push packages
-      if: github.event_name == 'push' && steps.current_branch.outputs.name == 'master' && steps.package_libraries.outputs.packages_exist == 'true'
+      if: github.event_name == 'push' && steps.get_branch.outputs.name == 'master' && steps.package_libraries.outputs.packages_exist == 'true'
       run: |
-        nuget push packages/*.nupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
-        nuget push packages/*.snupkg -ConfigFile Boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
+        nuget push packages/*.nupkg -ConfigFile boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
+        nuget push packages/*.snupkg -ConfigFile boilerplate/csharp/NuGet.config -Source github.com -SkipDuplicate
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN_PACKAGES }}
