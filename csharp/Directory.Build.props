@@ -52,7 +52,7 @@
                 <AltCover>true</AltCover>
                 <AltCoverForce>true</AltCoverForce>
                 <AltCoverAssemblyExcludeFilter>xunit|xunit\.runner\.visualstudio|$(MSBuildProjectName.Replace('.', '\.'))|\.TestBase</AltCoverAssemblyExcludeFilter>
-                <AltCoverAttributeFilter>ExcludeFromCodeCoverage</AltCoverAttributeFilter>
+                <AltCoverAttributeFilter>ExcludeFromCodeCoverageAttribute</AltCoverAttributeFilter>
                 <AltCoverTypeFilter>Microsoft\.CodeAnalysis\.EmbeddedAttribute|System\.Runtime\.CompilerServices\.NullableAttribute|System\.Runtime\.CompilerServices\.NullableContextAttribute</AltCoverTypeFilter>
                 <AltCoverXmlReport>$(MSBuildThisFileDirectory)coverage/$(MSBuildProjectName)_coverage.xml</AltCoverXmlReport>
                 <GenerateCoverageReport>true</GenerateCoverageReport>
