@@ -1,0 +1,6 @@
+<RuleSet Name="Code analysis rules" ToolsVersion="16.0">
+    <Rules AnalyzerId="SonarAnalyzer" RuleNamespace="SonarAnalyzer">
+    </Rules>
+    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    </Rules>
+</RuleSet>
