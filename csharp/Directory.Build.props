@@ -4,12 +4,16 @@
         <Nullable>enable</Nullable>
         <NoWarn>NU5105</NoWarn>
         <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)boilerplate/csharp/StyleCop.ruleset</CodeAnalysisRuleSet>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)boilerplate/csharp/CodeAnalysis.ruleset</CodeAnalysisRuleSet>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <RestoreConfigFile>$(MSBuildThisFileDirectory)boilerplate/csharp/NuGet.config</RestoreConfigFile>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="SonarAnalyzer.CSharp" Version="*">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
         <PackageReference Include="StyleCop.Analyzers.Unstable" Version="*">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

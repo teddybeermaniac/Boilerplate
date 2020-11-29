@@ -1,8 +1,0 @@
-<RuleSet Name="StyleCop rules" ToolsVersion="10.0">
-    <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-        <!-- Do not use regions -->
-        <Rule Id="SA1124" Action="None" />
-        <!-- Element documentation should not be copied and pasted -->
-        <Rule Id="SA1625" Action="None" />
-    </Rules>
-</RuleSet>
